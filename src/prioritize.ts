@@ -13,7 +13,7 @@ export async function askLLMToPrioritizeLinks(links: { href: string; text: strin
     model: openai('gpt-4.5-preview'),
     schema: prioritizationSchema,
     prompt: `
-You are selecting the 5–7 most useful links from a university website to help understand the school's:
+You are selecting the 10–14 most useful links from a university website to help understand the school's:
 - Admissions
 - Academics
 - Professors

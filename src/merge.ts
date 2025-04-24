@@ -30,9 +30,8 @@ function deduplicateBy<T>(arr: T[], keyFn: (item: T) => string): T[] {
   return Array.from(map.values());
 }
 
-export function mergeUniversityFiles(university: string) {
-  const dataDir = 'data';
-  const files = readdirSync(dataDir).filter(f => f.startsWith(university + '-') && f.endsWith('.json'));
+export function mergeUniversityFiles(university: string, runDir: string) {
+  const files = readdirSync(runDir).filter(f => f.startsWith(university + '-') && f.endsWith('.json'));
 
   const merged: UniversityData = {
     characterSummary: '',
@@ -44,7 +43,7 @@ export function mergeUniversityFiles(university: string) {
   };
 
   for (const file of files) {
-    const fullPath = join(dataDir, file);
+    const fullPath = join(runDir, file);
     const raw = readFileSync(fullPath, 'utf-8');
     const parsed = JSON.parse(raw);
 
@@ -61,19 +60,12 @@ export function mergeUniversityFiles(university: string) {
   merged.professors = deduplicateBy(merged.professors, p => p.name);
   merged.events = deduplicateBy(merged.events, e => e.title + (e.date || ''));
 
-  const outputPath = join(dataDir, `${university}.json`);
+  const outputPath = join(runDir, `${university}-${runDir.split("/").pop()}.json`);
   writeFileSync(outputPath, JSON.stringify(merged, null, 2));
   console.log(`✅ Merged into ${outputPath}`);
 
-  for (const file of files) unlinkSync(join(dataDir, file));
+  for (const file of files) unlinkSync(join(runDir, file));
   console.log(`🧹 Deleted ${files.length} temp files.`);
 
   console.log(JSON.stringify(merged, null, 2));
-}
-
-// If run directly from CLI
-if (process.argv[1] === new URL(import.meta.url).pathname) {
-  const universityName = process.argv[2];
-  if (!universityName) throw new Error('❌ Please provide a university name.');
-  mergeUniversityFiles(universityName.toLowerCase().replace(/\s+/g, '_'));
 }

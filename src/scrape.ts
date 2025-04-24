@@ -8,7 +8,10 @@ import universities from "./universities.json" assert { type: "json" };
 
 dotenv.config();
 
-async function scrapeUniversitySite(name: string, startUrl: string) {
+const runId = new Date().toISOString().replace(/[:.]/g, "-");
+const runDir = `data/${runId}`;
+
+async function scrapeUniversitySite(name: string, startUrl: string, runDir: string) {
   const browser = await playwright.chromium.launch({ headless: false });
   const page = await browser.newPage();
   await page.goto(startUrl, { waitUntil: "domcontentloaded" });
@@ -39,21 +42,21 @@ async function scrapeUniversitySite(name: string, startUrl: string) {
   console.log(`Prioritized ${prioritizedLinks.length} interesting links.`);
 
   // Step 4: Visit prioritized links
-  for (const link of prioritizedLinks.slice(0, 5)) {
+  for (const link of prioritizedLinks) {
     console.log(`\nVisiting: ${link.href}`);
     try {
       await page.goto(link.href, { waitUntil: "domcontentloaded" });
       const pageText = await page.evaluate(() => document.body.innerText);
 
       console.log(`[Subpage] Scraped text length: ${pageText.length} characters`);
-      await extractUniversityInfo(name, pageText);
+      await extractUniversityInfo(name, pageText, runDir);
     } catch (error) {
       console.error(`Failed to scrape ${link.href}:`, error);
     }
   }
 
   await browser.close();
-  mergeUniversityFiles(name.toLowerCase().replace(/\s+/g, "_"));
+  mergeUniversityFiles(name.toLowerCase().replace(/\s+/g, "_"), runDir);
 }
 
 // Start here 🚀
@@ -63,7 +66,7 @@ async function scrapeUniversitySite(name: string, startUrl: string) {
     console.log(`🎓 Starting scrape for: ${name}`);
     console.log(`===============================\n`);
     try {
-      await scrapeUniversitySite(name, url);
+      await scrapeUniversitySite(name, url, runDir);
     } catch (err) {
       console.error(`❌ Error scraping ${name}:`, err);
     }

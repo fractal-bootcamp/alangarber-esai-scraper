@@ -31,7 +31,7 @@ export type UniversityData = z.infer<typeof universitySchema>;
 let savedPages = 0;
 let skippedPages = 0;
 
-export async function extractUniversityInfo(universityName: string, pageText: string) {
+export async function extractUniversityInfo(universityName: string, pageText: string, runDir: string) {
   console.log(`[Extracting info for: ${universityName}]`);
 
   try {
@@ -46,12 +46,12 @@ ${pageText}`
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const safeName = universityName.toLowerCase().replace(/\s+/g, "_");
-    const filename = `data/${safeName}-${timestamp}.json`;
+    const filename = `${runDir}/${safeName}-${timestamp}.json`;
 
-    if (!existsSync("data")) {
-      mkdirSync("data");
+    if (!existsSync(runDir)) {
+      mkdirSync(runDir, { recursive: true });
     }
-
+    
     console.log("\n--- Extracted University Info ---");
     console.log(JSON.stringify(parsedData, null, 2));
 

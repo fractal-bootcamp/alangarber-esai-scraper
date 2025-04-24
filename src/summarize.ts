@@ -23,8 +23,3 @@ ${pageText}
   console.log("\n--- Summary ---");
   console.log(object.summary);
 }
-
-// Only run if executed directly
-if (process.argv[1] === new URL(import.meta.url).pathname) {
-  summarizeText("Stanford University is a private research university in Stanford, California. It is known for its academic strengths in computer science and entrepreneurship...");
-}
