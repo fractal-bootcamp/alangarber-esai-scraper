@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, unlinkSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { z } from 'zod';
+// import { cleanMergedFile } from './clean.js';
 
 const universitySchema = z.object({
   characterSummary: z.string(),
@@ -12,7 +13,6 @@ const universitySchema = z.object({
   })),
   professors: z.array(z.object({
     name: z.string(),
-    department: z.string(),
     bio: z.string(),
   })),
   events: z.array(z.object({
@@ -66,6 +66,8 @@ export function mergeUniversityFiles(university: string, runDir: string) {
 
   for (const file of files) unlinkSync(join(runDir, file));
   console.log(`🧹 Deleted ${files.length} temp files.`);
+
+//   cleanMergedFile(outputPath);
 
   console.log(JSON.stringify(merged, null, 2));
 }

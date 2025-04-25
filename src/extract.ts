@@ -16,7 +16,6 @@ export const universitySchema = z.object({
   })),
   professors: z.array(z.object({
     name: z.string(),
-    department: z.string(),
     bio: z.string(),
   })),
   events: z.array(z.object({
