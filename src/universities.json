@@ -1,8 +1,8 @@
 [
-    { "name": "Stanford University", "url": "https://www.stanford.edu" },
-    { "name": "Harvard University", "url": "https://www.harvard.edu" },
-    { "name": "MIT", "url": "https://www.mit.edu" },
-    { "name": "Oberlin College", "url": "https://www.oberlin.edu" },
-    { "name": "Howard University", "url": "https://www.howard.edu" }
+    { "name": "University of Chicago", "url": "https://www.uchicago.edu" },
+    { "name": "Rice University", "url": "https://www.rice.edu" },
+    { "name": "New York University", "url": "https://www.nyu.edu" },
+    { "name": "Spelman College", "url": "https://www.spelman.edu" },
+    { "name": "University of California, Santa Cruz", "url": "https://www.ucsc.edu" }
   ]
   
